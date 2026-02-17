@@ -1,0 +1,20 @@
+replicaCount: 1
+
+config:
+  oidc:
+    secret:
+      create: false
+      name: headlamp-oidc
+    externalSecret:
+      enabled: true
+      name: headlamp-oidc
+
+# Due to [this issue](https://github.com/headlamp-k8s/headlamp/issues/2022), we need to manually add the OIDC env vars for now
+
+clusterRoleBinding:
+  create: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi

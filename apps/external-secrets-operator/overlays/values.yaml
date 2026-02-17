@@ -1,0 +1,6 @@
+replicaCount: 1
+fullnameOverride: external-secrets-operator
+bitwarden-sdk-server:
+  enabled: true
+  podAnnotations:
+    secret.reloader.stakater.com/reload: "bitwarden-css-certs,bitwarden-secrets-manager,bitwarden-secrets-manager-secrets,bitwarden-tls-certs,bitwarden-access-token"

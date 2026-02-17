@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: headlamp-admin
+subjects:
+  - kind: User
+    name: michal.drla@protonmail.com # retrieved from the email scope
+    apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: headlamp
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io

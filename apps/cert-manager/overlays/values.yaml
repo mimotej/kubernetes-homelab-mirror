@@ -1,0 +1,4 @@
+startupapicheck:
+  timeout: 5m
+crds:
+  enabled: true

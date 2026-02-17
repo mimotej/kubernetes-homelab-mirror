@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: intel-device-plugins-gpu-operator
+spec:
+  destination:
+    namespace: intel-device-plugins-gpu
+    name: production
+  project: default
+  source:
+    path: apps/intel-device-plugins-gpu
+    repoURL: https://github.com/mimotej/kubernetes-homelab-mirror.git
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+      - Validate=false
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      allowEmpty: true

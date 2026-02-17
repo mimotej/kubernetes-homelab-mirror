@@ -1,0 +1,51 @@
+image:
+  tag: 10.11.6
+nodeSelector:
+  platform: n100
+replicaCount: 1
+resources:
+  limits:
+    gpu.intel.com/i915: "1"
+  requests:
+    gpu.intel.com/i915: "1"
+    memory: 1Gi
+    cpu: 1
+
+securityContext:
+  capabilities:
+    add:
+      - "SYS_ADMIN"
+    drop:
+      - "ALL"
+
+extraVolumes:
+  - name: hwa
+    hostPath:
+      path: /dev/dri
+
+extraVolumeMounts:
+  - name: hwa
+    mountPath: /dev/dri
+
+volumes:
+  - name: tv-series
+    persistentVolumeClaim:
+      claimName: pvc-jellyfin-tv
+volumeMounts:
+  - mountPath: /tv_series
+    name: tv-series
+
+persistence:
+  config:
+    enabled: true
+    existingClaim: pvc-jellyfin-config
+  media:
+    enabled: true
+    type: pvc
+    existingClaim: pvc-jellyfin-media
+  cache:
+    enabled: true
+
+ingress:
+  enabled: false
+

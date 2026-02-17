@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+  labels:
+   app.kubernetes.io/name: homepage
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homepage
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: homepage
+        app: homepage
+    spec:
+      serviceAccountName: homepage
+      automountServiceAccountToken: true
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 10.0.0.15      # Custom DNS server
+      enableServiceLinks: true
+      containers:
+        - name: homepage
+          image: "ghcr.io/gethomepage/homepage:v1.9"
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 40
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+          env:
+            - name: HOMEPAGE_ALLOWED_HOSTS
+              value: homepage.internal # required, may need port. See gethomepage.dev/installation/#homepage_allowed_hosts
+            - name: TZ
+              value: "Europe/Prague"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/config
+              name: homepage-config
+            - mountPath: /app/config/logs
+              name: logs
+      volumes:
+        - name: homepage-config
+          nfs:
+            server: 10.0.0.15
+            path: /storage/homepage
+        - name: logs
+          emptyDir: {}

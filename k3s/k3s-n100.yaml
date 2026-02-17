@@ -1,0 +1,7 @@
+write-kubeconfig-mode: "0644"
+cluster-init: false
+token: "CHANGE_ME"
+server: htttp://k3s-master:6443
+node-label:
+  - "arch=x86"
+  - "platform=n100"

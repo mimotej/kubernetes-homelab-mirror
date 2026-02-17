@@ -1,0 +1,6 @@
+write-kubeconfig-mode: "0644"
+cluster-init: true
+token: "CHANGE_ME"
+node-label:
+  - "arch=x86"
+  - "platform=proxmox"

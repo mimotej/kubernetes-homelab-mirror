@@ -1,0 +1,6 @@
+image:
+  tag: v3.0.1
+config:
+  persistence:
+    volumeName: seerr-config-pv
+    storageClass: "-"

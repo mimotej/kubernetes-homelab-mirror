@@ -1,0 +1,22 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: homepage
+spec:
+  destination:
+    namespace: homepage
+    name: production
+  project: default
+  source:
+    path: apps/homepage
+    repoURL: https://github.com/mimotej/kubernetes-homelab-mirror.git
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+      - Validate=false
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      allowEmpty: true

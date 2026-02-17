@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: jellyfin
+
+resources:
+- ../../cluster/base/namespaces/jellyfin
+- base
+
+helmCharts:
+  - name: jellyfin
+    valuesFile: overlays/values.yaml
+    includeCRDs: true
+    version: 2.7.0
+    repo: https://jellyfin.github.io/jellyfin-helm
+    namespace: jellyfin
+    releaseName: jellyfin
+

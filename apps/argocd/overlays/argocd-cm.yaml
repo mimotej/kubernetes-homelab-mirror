@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+
+data:
+  kustomize.buildOptions: "--enable-helm"
+  url: http://argocd.internal
+  server.dex.server: "http://argocd-dex-server.argocd.svc.cluster.local:5556/api/dex/"
+  dexserver.disable.tls: "true"
+  dex.config: |
+      connectors:
+      - config:
+          issuer: https://auth.mimotej.stream/application/o/argocd_tf/
+          clientID: hdlYVrjuYZjpKxYiTmHMjJN3hUY2NzgMpp3XMkNX
+          clientSecret: $dex.authentik.clientSecret
+          insecureEnableGroups: true
+          scopes:
+            - openid
+            - profile
+            - email
+        name: authentik
+        type: oidc
+        id: authentik

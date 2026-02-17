@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myspeed
+  labels:
+    app.kubernetes.io/name: myspeed
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: myspeed
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: myspeed
+        app: myspeed
+    spec:
+      containers:
+        - name: myspeed
+          image: "docker.io/germannewsmaker/myspeed:1.0.9"
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5216
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5216
+            initialDelaySeconds: 40
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+          env:
+            - name: TZ
+              value: "Europe/Prague"
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          ports:
+            - name: http
+              containerPort: 5216
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /myspeed/data
+              name: myspeed-config
+      volumes:
+        - name: myspeed-config
+          nfs:
+            server: 10.0.0.15
+            path: /storage/myspeed

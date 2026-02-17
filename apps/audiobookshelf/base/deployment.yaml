@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audiobookshelf
+  labels:
+    app.kubernetes.io/name: audiobookshelf
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app.kubernetes.io/name: audiobookshelf
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: audiobookshelf
+    spec:
+      containers:
+        - name: audiobookshelf
+          image: ghcr.io/advplyr/audiobookshelf:2.32.1 
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: metadata
+              mountPath: /metadata
+            - name: audiobooks
+              mountPath: /audiobooks
+            - name: podcasts
+              mountPath: /podcasts
+            - name: ebooks
+              mountPath: /ebooks
+            - name: tmp
+              mountPath: /tmp
+          resources:
+            requests:
+              cpu: 50m
+              memory: 384Mi
+      volumes:
+        - name: config
+          nfs:
+            server: 10.0.0.15
+            path: /storage/media/audiobookshelf/config
+        - name: audiobooks
+          nfs:
+            server: 10.0.0.15
+            path: /storage/media/bookshelf/audio_books
+        - name: ebooks
+          nfs:
+            server: 10.0.0.15
+            path: /storage/media/kavita/books
+
+        - name: metadata
+          nfs:
+            server: 10.0.0.15
+            path: /storage/media/audiobookshelf-kubernetes/metadata
+        - name: podcasts
+          nfs:
+            server: 10.0.0.15
+            path: /storage/media/bookshelf/audio_books/podcasts
+        - name: tmp
+          emptyDir: { }
+

@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ingressRoute.yaml
+- service.yaml
+- pv-config.yaml
+- pv-media.yaml
+- pv-tv-series.yaml
+- pvc-config.yaml
+- pvc-media.yaml
+- pvc-tv-series.yaml
