@@ -8,12 +8,12 @@ resources:
 - base
 
 helmCharts:
-  - name: renovate
+  - name: renovate-operator
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 46.14.1
-    repo: oci://ghcr.io/renovatebot/charts
+    version: 2.8.3
+    repo:  oci://ghcr.io/mogenius/helm-charts
     namespace: renovate
-    releaseName: renovate
+    releaseName: renovate-operator
 
 

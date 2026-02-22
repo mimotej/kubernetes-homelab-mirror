@@ -1,0 +1,50 @@
+maxRunners: 2
+minRunners: 1
+controllerServiceAccount:
+  namespace: arc-systems
+  name: arc-gha-rs-controller
+containerMode:
+  type: kubernetes
+  kubernetesModeWorkVolumeClaim:
+    accessModes: ["ReadWriteOnce"]
+    storageClassName: local-path
+    resources:
+      requests:
+        storage: 5Gi
+runnerScaleSetName: "selfhosted-kubernetes"
+githubConfigUrl: "https://github.com/mimotej/kubernetes-homelab-mirror"
+githubConfigSecret: "gh-app-credentials"
+template: 
+  spec:
+    securityContext:
+      fsGroup: 123
+      runAsUser: 1000
+      runAsGroup: 1000
+    containers:
+      - name: runner
+        image: ghcr.io/actions/actions-runner:2.331.0
+        command: ["/home/runner/run.sh"]
+        env:
+          - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+            value: "false"
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 512Mi
+        volumeMounts:
+          - name: terraform-states
+            mountPath: /terraform-states
+          - name: additional-data
+            mountPath: /additional-data
+    volumes:
+      - name: terraform-states
+        nfs:
+          server: 10.0.0.8
+          path: /mnt-data/terraform-states
+      - name: additional-data
+        nfs:
+          server: 10.0.0.8
+          path: /mnt-data/additional-data-gh-runners
+

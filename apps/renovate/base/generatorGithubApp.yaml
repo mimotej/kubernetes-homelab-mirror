@@ -1,0 +1,13 @@
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: GithubAccessToken
+metadata:
+  name: github-auth-token
+spec:
+  appID: "2029806" # change to your GitHub App ID
+  installID: "87880951" # change to your GitHub App Installation ID
+  auth:
+    privateKey:
+      secretRef:
+        name: gh-app-credentials
+        key: github_app_private_key

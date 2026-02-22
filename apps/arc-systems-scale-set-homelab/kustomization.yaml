@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: arc-systems-homelab
+
+resources:
+- ../../cluster/base/namespaces/arc-systems-homelab
+- base
+
+helmCharts:
+  - name: gha-runner-scale-set
+    valuesFile: overlays/values.yaml
+    includeCRDs: true
+    version: 0.13.1
+    repo: oci://ghcr.io/actions/actions-runner-controller-charts
+    namespace: arc-systems-homelab
+    releaseName: arc-runner-set
+

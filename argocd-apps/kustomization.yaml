@@ -2,6 +2,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - arc-systems
+  - arc-systems-scale-set-homelab
+  - arc-systems-scale-set-portainer
   - argocd
   - audiobookshelf
   - cert-manager

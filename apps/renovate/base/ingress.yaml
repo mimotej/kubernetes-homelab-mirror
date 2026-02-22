@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: renovate-ui
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`renovate.internal`)
+      kind: Rule
+      services:
+        - name: renovate-operator-renovate-operator
+          port: 8081
+
+
