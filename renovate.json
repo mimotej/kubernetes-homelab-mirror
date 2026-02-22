@@ -1,4 +1,55 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "prHourlyLimit": 0
+  "prHourlyLimit": 10,
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "enabled": true,
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ]
+    },
+    {
+      "matchDatasources": [
+        "helm"
+      ],
+      "commitMessageTopic": "chart {{depName}}"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "commitMessageTopic": "image {{depName}}"
+    }
+  ],
+  "argocd": {
+    "managerFilePatterns": [
+      "//apps/.+\\.ya?ml$/"
+    ]
+  },
+  "helm-values": {
+    "managerFilePatterns": [
+      "/apps/.+\\.ya?ml$/"
+    ]
+  },
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/apps/.+\\.ya?ml$/"
+    ]
+  },
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "enabledManagers": [
+    "argocd",
+    "dockerfile",
+    "github-actions",
+    "kustomize",
+    "kubernetes",
+    "helmv3",
+    "helm-values"
+  ]
 }
