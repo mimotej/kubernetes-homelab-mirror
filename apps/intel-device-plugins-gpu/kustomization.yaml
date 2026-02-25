@@ -16,7 +16,7 @@ helmCharts:
   - name: intel-device-plugins-gpu
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 0.34.1
+    version: 0.35.0
     repo: https://intel.github.io/helm-charts/
     namespace: intel-device-plugins-gpu
     releaseName: intel-device-plugins-gpu
