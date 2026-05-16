@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nextcloud
+
+resources:
+  - ../../cluster/base/namespaces/nextcloud
+  - base
+
+helmCharts:
+  - name: nextcloud
+    includeCRDs: true
+    repo: https://nextcloud.github.io/helm/
+    version: 9.1.0
+    valuesFile: overlays/values.yaml
+    namespace: nextcloud
+    releaseName: nextcloud

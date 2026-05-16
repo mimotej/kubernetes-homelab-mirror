@@ -1,0 +1,22 @@
+service:
+  main:
+    type: ClusterIP
+    ports:
+      main:
+        port: 4080
+  dns-tcp:
+    type: LoadBalancer
+  dns-udp:
+    type: LoadBalancer
+persistence:
+  config:
+    type: hostPath
+    hostPathType: Directory
+    hostPath: /nfs/storage/adguard/conf
+  data:
+    type: hostPath
+    hostPathType: Directory
+    hostPath: /nfs/storage/adguard/work
+podOptions:
+  nodeSelector:
+    platform: n100

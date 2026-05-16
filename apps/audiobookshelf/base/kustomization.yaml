@@ -6,3 +6,7 @@ resources:
 - deployment.yaml
 - ingressRoute.yaml
 - service.yaml
+- pv-docker-data.yaml
+- pv-storage-media.yaml
+- pvc-docker-data.yaml
+- pvc-storage-media.yaml

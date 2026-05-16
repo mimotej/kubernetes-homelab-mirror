@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - cron-job.yaml
+  - external-secret.yaml
+  - pv-crowdsec-agent.yaml
+  - pv-crowdsec-config.yaml
+  - pv-crowdsec-data.yaml
+  - pv-database.yaml
+  - pv-db-dump.yaml
+  - pvc-crowdsec-agent.yaml
+  - pvc-crowdsec-config.yaml
+  - pvc-crowdsec-data.yaml
+  - pvc-database.yaml
+  - pvc-db-dump.yaml
+  - role-binding.yaml
+  - role.yaml
+  - service-account.yaml

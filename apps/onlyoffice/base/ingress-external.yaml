@@ -1,0 +1,22 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: onlyoffice-secure
+spec:
+  entryPoints:
+    - websecure-external
+  routes:
+    - match: Host(`office.mimotej.stream`)
+      kind: Rule
+      middlewares:
+        # - name: middleware-crowdsec
+        #   namespace: traefik
+        - name: middleware-geoblock
+          namespace: traefik
+        - name: onlyoffice-middleware-headers
+      services:
+        - name: onlyoffice
+          port: 80
+  tls:
+    secretName: onlyoffice-tls

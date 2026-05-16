@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   local:
-    path: /storage/media/jellyfin/movies
+    path: /nfs/storage/jellyfin/movies
   nodeAffinity:
     required:
       nodeSelectorTerms:

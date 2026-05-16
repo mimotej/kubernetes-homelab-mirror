@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - certificate.yaml
+  - cron-job.yaml
+  - external-secret.yaml
+  - ingress-external.yaml
+  - middleware-headers.yaml
+  - pv-database.yaml
+  - pv-db-dump.yaml
+  - pv-nextcloud-data.yaml
+  - pv-nextcloud-persistence.yaml
+  - pv-redis.yaml
+  - pvc-database.yaml
+  - pvc-db-dump.yaml
+  - pvc-nextcloud-data.yaml
+  - pvc-nextcloud-persistence.yaml
+  - pvc-redis.yaml
+  - role-binding.yaml
+  - role.yaml
+  - service-account.yaml

@@ -4,16 +4,16 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-- ../../cluster/base/namespaces/argocd
-- base
-- https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/ha/install.yaml
+  - ../../cluster/base/namespaces/argocd
+  - base
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.4.2/manifests/install.yaml
 
 patches:
-- path: overlays/argocd-cmd-params-cm.yaml
-- path: overlays/argocd-cm.yaml
-- path: overlays/argocd-rbac-cm.yaml
+  - path: overlays/argocd-cmd-params-cm.yaml
+  - path: overlays/argocd-cm.yaml
+  - path: overlays/argocd-rbac-cm.yaml
 
-images:
-- name: quay.io/argoproj/argocd
-  newName: ghcr.io/argoproj/argo-cd/argocd
-  newTag: 3.4.0-4409ec0a
+# images:
+#   - name: quay.io/argoproj/argocd
+#     newName: ghcr.io/argoproj/argo-cd/argocd
+#     newTag: v3.4.2

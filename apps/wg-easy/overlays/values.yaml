@@ -1,0 +1,22 @@
+storage:
+  existingClaim: pvc-wg-easy-config
+config:
+  init:
+    existingSecret: wg-easy-secrets
+    host: "vpn.mimotej.stream"
+    dns: "10.0.0.4"
+extraEnvVars:
+  - name: WG_DEFAULT_DNS
+    value: "10.0.0.4"
+  - name: WG_ALLOWED_IPS
+    value: "10.0.0.4/32"
+  - name: TZ
+    value: "Europe/Prague"
+
+service:
+  ui:
+    type: ClusterIP
+    port: 51821
+  wireguard:
+    type: LoadBalancer
+    port: 64225

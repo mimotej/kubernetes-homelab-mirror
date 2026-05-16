@@ -1,0 +1,14 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dozzle
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`dozzle.internal`)
+      kind: Rule
+      services:
+        - name: dozzle-service
+          port: 8080

@@ -1,0 +1,65 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware-crowdsec
+spec:
+  plugin:
+    crowdsec-bouncer-traefik-plugin:
+      enabled: true
+      crowdsecMode: stream
+      crowdsecLapiScheme: http
+      crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
+      crowdsecLapiKeyFile: /secrets/traefik-bouncer-key/traefik-bouncer-key
+      httpTimeoutSeconds: 60
+      crowdsecAppsecEnabled: true
+      crowdsecAppsecHost: crowdsec-appsec-service.crowdsec.svc.cluster.local:7422
+      crowdsecAppsecFailureBlock: true
+      crowdsecAppsecUnreachableBlock: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware-geoblock
+spec:
+  plugin:
+    geoblock-plugin:
+      enabled: true
+      silentStartUp: false
+      allowLocalRequests: true
+      logLocalRequests: true
+      logAllowedRequests: true
+      logApiRequests: true
+      api: "https://get.geojs.io/v1/ip/country/{ip}"
+      apiTimeoutMs: 750 # optional
+      cacheSize: 25
+      forceMonthlyUpdate: true
+      allowUnknownCountries: false
+      unknownCountryApiResponse: "nil"
+      blackListMode: false
+      addCountryHeader: true
+      countries:
+        - CZ
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware-oidc
+spec:
+  plugin:
+    traefik-oidc-auth:
+      Secret: "urn:k8s:secret:traefik-middleware-auth:traefik-plugin-oidc-secret"
+      Provider:
+        Url: "https://auth.mimotej.stream/application/o/traefik_tf"
+        ClientId: "urn:k8s:secret:traefik-middleware-auth:authentik-traefik-client-id"
+        ClientSecret: "urn:k8s:secret:traefik-middleware-auth:authentik-traefik-client-secret"
+      Scopes: ["openid", "profile", "email"]
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: middleware-whitelist
+spec:
+  ipAllowList:
+    sourceRange:
+      - "31.31.232.0/21"

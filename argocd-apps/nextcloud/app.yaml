@@ -1,0 +1,32 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nextcloud
+spec:
+  ignoreDifferences:
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jqPathExpressions:
+      - .status
+      - .metadata.finalizers
+      - .spec.data[].remoteRef.conversionStrategy
+      - .spec.data[].remoteRef.decodingStrategy
+      - .spec.data[].remoteRef.metadataPolicy
+      - .spec.data[].remoteRef.nullBytePolicy
+  destination:
+    namespace: nextcloud
+    name: production
+  project: default
+  source:
+    path: apps/nextcloud
+    repoURL: https://github.com/mimotej/kubernetes-homelab-mirror.git
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+      - Validate=false
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      allowEmpty: true

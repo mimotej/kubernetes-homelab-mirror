@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-audiobookshelf-storage-media
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1700Gi
+  storageClassName: ""
+  volumeName: pv-audiobookshelf-storage-media

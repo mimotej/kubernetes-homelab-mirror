@@ -1,0 +1,15 @@
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: authentik-lb
+# spec:
+#   ports:
+#     - protocol: TCP
+#       port: 9001
+#       targetPort: 9001
+#   type: LoadBalancer
+#   selector:
+#     app.kubernetes.io/name: authentik
+#
+#

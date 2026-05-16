@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nextcloud-tls
+spec:
+  secretName: nextcloud-tls
+  dnsNames:
+    - "nextcloud.mimotej.stream"
+  issuerRef:
+    name: dns-challenge-issuer-prod
+    kind: ClusterIssuer

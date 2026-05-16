@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-esphome
+  labels:
+    {{- include "homeassistant.labels" . | nindent 4 }}
+    {{- with .Values.esphome.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.esphome.service.type }}
+  ports:
+    - port: {{ .Values.esphome.service.port | default 6052 }}
+      targetPort: {{ .Values.esphome.service.port | default 6052 }}
+      protocol: TCP
+      name: esphome
+  selector:
+    {{- include "homeassistant.selectorLabels" . | nindent 4 }}
+    {{- with .Values.esphome.selectorLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+{{- if .Values.esphome.service.loadBalancer.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-esphome-lb
+  labels:
+    {{- with .Values.esphome.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: {{ .Values.service.port | default 6052 }}
+      targetPort: {{ .Values.service.port | default 6052 }}
+      protocol: TCP
+  selector:
+    {{- include "homeassistant.selectorLabels" . | nindent 4 }}
+    {{- with .Values.esphome.selectorLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

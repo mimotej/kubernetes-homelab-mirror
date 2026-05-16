@@ -1,0 +1,84 @@
+replicaCount: 1
+nextcloud:
+  host: nextcloud.mimotej.stream
+  trustedDomains: "nextcloud.mimotej.stream"
+  extraEnv:
+    - name: OVERWRITEPROTOCOL
+      value: https
+    - name: OVERWRITEHOST
+      value: nextcloud.mimotej.stream
+    - name: overwrite.cli.url
+      value: https://nextcloud.mimotej.stream
+    - name: TRUSTED_PROXIES
+      value: "nextcloud.mimotej.stream,10.0.0.4/32,31.31.238.36/32,localhost,10.0.0.0/8"
+    - name: APACHE_DISABLE_REWRITE_IP
+      value: "1"
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-secrets
+    usernameKey: admin-username
+    passwordKey: admin-password
+imaginary:
+  enabled: true
+cronjob:
+  enabled: true
+readinessProbe:
+  enabled: false
+livenessProbe:
+  enabled: false
+startupProbe:
+  enabled: false
+persistence:
+  enabled: true
+  existingClaim: pvc-nextcloud-persistence
+  nextcloudData:
+    enabled: true
+    existingClaim: pvc-nextcloud-data
+
+postgresql:
+  enabled: true
+  global:
+    postgresql:
+      auth:
+        username: oc_nextcloud
+        database: nextcloud_database
+        existingSecret: nextcloud-secrets
+        secretKeys:
+          userPasswordKey: db-password
+  primary:
+    resourcesPreset: none
+    persistence:
+      enabled: true
+      existingClaim: pvc-nextcloud-database
+    extraVolumeMounts:
+      - name: nextcloud-db-dump
+        mountPath: /db_dump
+    extraVolumes:
+      - name: nextcloud-db-dump
+        persistentVolumeClaim:
+          claimName: pvc-nextcloud-db-dump
+
+internalDatabase:
+  enabled: false
+externalDatabase:
+  enabled: true
+  type: postgresql
+  database: "nextcloud"
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-secrets
+    usernameKey: db-username
+    passwordKey: db-password
+
+redis:
+  enabled: true
+  architecture: standalone
+  master:
+    persistence:
+      existingClaim: pvc-nextcloud-redis
+  auth:
+    enabled: true
+    existingSecret: nextcloud-secrets
+    existingSecretPasswordKey: redis-password
+  replica:
+    replicaCount: 0

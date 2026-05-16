@@ -1,0 +1,97 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "prHourlyLimit": 30,
+  "extends": [
+    "config:recommended"
+  ],
+  "ignorePaths": [
+    "apps/homeassistant/kustomization.yaml"
+  ],
+  "customManagers": [
+    {
+      
+      // From https://github.com/jkroepke/renovate-config/blob/main/default.json
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/./"
+      ],
+      "matchStrings": [
+        "[\\t ]*(?:#|//) ?renovate: (?<datasource>git-refs)=(?<depName>\\S+)(?: branch=(?<currentValue>\\S+))?[\\t ]*\\r?\\n.+?[:=][\\t ]*[\"']?(?<currentDigest>[a-f0-9]+)[\"']?",
+        "[\\t ]*(?:#|//) ?renovate: (?<datasource>[^=]+)=(?<depName>\\S+)(?: registry=(?<registryUrl>\\S+))?(?: versioning=(?<versioning>\\S+))?[\\t ]*\\r?\\n.+?[:=][\\t ]*[\"']?(?<currentValue>[^@\\s\"'=]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?[\"']?"
+      ],
+      "currentValueTemplate": "{{#if currentValue}}{{{currentValue}}}{{else if (equals datasource 'git-refs')}}main{{/if}}",
+      "datasourceTemplate": "{{#if (equals datasource 'github')}}github-tags{{else}}{{{datasource}}}{{/if}}",
+      "versioningTemplate": "{{#if (equals datasource 'docker')}}docker{{else if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/apps/immich/overlays/values\\.yaml$/"
+      ],
+      "matchStrings": [
+        "controllers:\\s+main:\\s+containers:\\s+main:\\s+[\\s\\S]*?image:\\s+tag:\\s*(?<currentValue>[^\\s]+)"
+      ],
+      "depNameTemplate": "ghcr.io/immich-app/immich-server",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "enabled": true,
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ]
+    },
+    {
+      "matchDatasources": [
+        "helm"
+      ],
+      "commitMessageTopic": "chart {{depName}}"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "commitMessageTopic": "image {{depName}}"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "lscr.io/linuxserver/qbittorrent"
+      ],
+      "allowedVersions": "/^[0-9]\.[0-9]{1,3}\.[0-9]{1,3}$/"
+    }
+  ],
+  "argocd": {
+    "managerFilePatterns": [
+      "//apps/.+\\.ya?ml$/"
+    ]
+  },
+  "helm-values": {
+    "managerFilePatterns": [
+      "/apps/.+\\.ya?ml$/"
+    ]
+  },
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/apps/.+\\.ya?ml$/"
+    ]
+  },
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "enabledManagers": [
+    "argocd",
+    "custom.regex",
+    "dockerfile",
+    "github-actions",
+    "kustomize",
+    "kubernetes",
+    "helmv3",
+    "helm-values"
+  ]
+}

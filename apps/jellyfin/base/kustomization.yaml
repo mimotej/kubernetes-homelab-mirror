@@ -3,7 +3,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- ingressRoute.yaml
+- certificate.yaml
+- ingress-route.yaml
+- ingress-external.yaml
+- middleware-headers.yaml
 - service.yaml
 - pv-config.yaml
 - pv-media.yaml

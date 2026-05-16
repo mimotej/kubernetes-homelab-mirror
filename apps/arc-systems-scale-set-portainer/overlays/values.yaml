@@ -22,7 +22,7 @@ template:
       runAsGroup: 1000
     containers:
       - name: runner
-        image: ghcr.io/actions/actions-runner:2.331.0
+        image: ghcr.io/actions/actions-runner:2.334.0
         command: ["/home/runner/run.sh"]
         env:
           - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
@@ -40,11 +40,9 @@ template:
             mountPath: /additional-data
     volumes:
       - name: terraform-states
-        nfs:
-          server: 10.0.0.8
-          path: /mnt-data/terraform-states
+        persistentVolumeClaim:
+          claimName: pvc-arc-portainer-terraform-states
       - name: additional-data
-        nfs:
-          server: 10.0.0.8
-          path: /mnt-data/additional-data-gh-runners
+        persistentVolumeClaim:
+          claimName: pvc-arc-portainer-additional-data
 

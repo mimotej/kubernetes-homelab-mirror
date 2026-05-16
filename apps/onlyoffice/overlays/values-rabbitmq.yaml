@@ -1,0 +1,18 @@
+global:
+  security:
+    allowInsecureImages: true
+auth:
+  username: onlyoffice
+  existingPasswordSecret: onlyoffice-secrets
+  existingSecretPasswordKey: onlyoffice-rabbitmq-secret
+resourcesPreset: none
+
+startupProbe:
+  enabled: true
+
+image:
+  repository: bitnamilegacy/rabbitmq
+  tag: 4.1.3-debian-12-r1
+
+persistence:
+  existingClaim: pvc-onlyoffice-rabbitmq

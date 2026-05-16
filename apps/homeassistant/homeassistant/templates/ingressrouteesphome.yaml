@@ -1,0 +1,16 @@
+{{- if .Values.esphome.ingress.enabled -}}
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-esphome
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ .Values.esphome.ingress.host }}`)
+      kind: Rule
+      services:
+        - name: {{ include "homeassistant.fullname" . }}-esphome
+          port: {{ .Values.service.port | default 6052 }}
+{{- end }}

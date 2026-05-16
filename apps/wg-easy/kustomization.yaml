@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: wg-easy
+
+resources:
+- ../../cluster/base/namespaces/wg-easy
+- base
+
+helmCharts:
+  - name: wg-easy
+    valuesFile: overlays/values.yaml
+    includeCRDs: true
+    version: 0.6.3
+    repo: oci://ghcr.io/slybase/charts
+    namespace: wg-easy
+    releaseName: wg-easy
+

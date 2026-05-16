@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: llm
+
+resources:
+  - ../../cluster/base/namespaces/llm
+  - base
+
+helmCharts:
+  - name: llmkube
+    includeCRDs: true
+    version: 0.7.8
+    repo: https://defilantech.github.io/LLMKube
+    namespace: llm
+    releaseName: llmkube
+  - name: open-webui
+    repo: https://helm.openwebui.com/
+    valuesFile: overlays/values-openwebui.yaml
+    version: 14.5.0
+    namespace: llm
+    releaseName: openwebui
+  - name: searxng
+    repo: https://charts.kubito.dev
+    version: 1.1.1
+    namespace: llm
+    releaseName: searxng

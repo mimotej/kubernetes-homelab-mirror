@@ -1,0 +1,25 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - certificate.yaml
+  - cron-job.yaml
+  - config-map.yaml
+  - deployment.yaml
+  - external-secret.yaml
+  - ingress.yaml
+  - ingress-external.yaml
+  - middleware-headers.yaml
+  - pv-database.yaml
+  - pv-rabbitmq.yaml
+  - pv-redis.yaml
+  - pv-db-dump.yaml
+  - pvc-database.yaml
+  - pvc-rabbitmq.yaml
+  - pvc-redis.yaml
+  - pvc-db-dump.yaml
+  - role-binding.yaml
+  - role.yaml
+  - service.yaml
+  - service-account.yaml

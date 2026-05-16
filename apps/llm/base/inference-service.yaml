@@ -1,0 +1,15 @@
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: chat-prod
+spec:
+  modelRef: qwen3.5-2b
+  runtime: llamacpp
+  replicas: 1
+  priority: low
+  evictionProtection: false
+  contextSize: 32768
+  flashAttention: true
+  parallelSlots: 2
+  nodeSelector:
+    platform: proxmox

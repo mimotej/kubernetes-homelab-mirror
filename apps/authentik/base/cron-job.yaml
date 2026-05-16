@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sql-dump
+spec:
+  schedule: "30 0 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - command:
+            - /bin/bash
+            - -c
+            - |
+              cd /db_dump
+              echo "Deleting dumps older than 14 days..."
+              find /db_dump -maxdepth 1 -mtime +13 -type f -delete
+              DATE=$(date +%Y-%m-%d-%H-%M-%S)
+              echo "Dumping database to /db_dump/authentik-$DATE.sql..."
+              kubectl exec authentik-postgresql-0 -n authentik -- bash -c "PGPASSWORD=$POSTGRES_PASSWORD pg_dumpall -U $POSTGRES_USER > /db_dump/authentik-$DATE.sql"
+              echo "Dump completed successfully."
+              exit 0
+            image: bitnamilegacy/kubectl:1.33.4
+            imagePullPolicy: IfNotPresent
+            name: job
+            env:
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                 secretKeyRef:
+                   name: authentik-postgres-external-secret
+                   key: password
+              - name: POSTGRES_USER
+                valueFrom:
+                 secretKeyRef:
+                   name: authentik-postgres-external-secret
+                   key: username
+            volumeMounts:
+              - name: authentik-db-dump
+                mountPath: /db_dump
+          serviceAccount: kubectl-sql-dump
+          volumes:
+            - name: authentik-db-dump
+              persistentVolumeClaim:
+                claimName: pvc-authentik-db-dump
+

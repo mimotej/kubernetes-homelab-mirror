@@ -1,0 +1,6 @@
+ollama:
+  enabled: false
+persistence:
+  storageClass: local-path
+pipelines:
+  enabled: false

@@ -1,0 +1,115 @@
+replicaCount: 1
+# This is for setting Kubernetes Annotations to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+# This is for setting Kubernetes Labels to a Pod.
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+image:
+  repository: ""
+  tag: ""
+  imagePullPolicy: ""
+
+securityContext:
+  capabilities:
+    add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
+  runAsUser: 0
+
+
+hostNetwork: 
+  enabled: true
+
+livenessProbe:
+  httpGet:
+    port: 8123
+    path: /
+  initialDelaySeconds: 60
+  periodSeconds: 10
+readinessProbe:
+  httpGet:
+    port: 8123
+    path: /
+  initialDelaySeconds: 70
+  periodSeconds: 10
+
+persistence:
+  enabled: true
+backups:
+  enabled: true
+service:
+  type: ClusterIP
+  loadBalancer:
+    enabled: false
+nodeSelector: 
+  platform: n100
+ingress:
+  enabled: true
+  host: homeassistant.internal
+
+resources:
+  requests:
+    memory: "768Mi"
+    cpu: "250m"
+  limits:
+    memory: "1536Mi"
+
+matter:
+  enabled: true
+  image:
+    repository: ""
+    tag: 8.1.0
+    pullPolicy: IfNotPresent
+  port: ""
+  persistence:
+    enabled: true
+  service:
+    type: ClusterIP
+    loadBalancer:
+      enabled: false
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+
+esphome:
+  enabled: true
+  replicaCount: 1
+  image:
+    tag: 2026.2.2
+  labels:
+    app: esphome
+  selectorLabels:
+    app: esphome
+  livenessProbe:
+    httpGet:
+      port: 6052
+      path: /
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      port: 6052
+      path: /
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  service:
+    type: ClusterIP
+    loadBalancer:
+      enabled: false
+  ingress:
+    enabled: true
+    host: esphome.internal
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+  persistence:
+    enabled: true
+    existingClaim: pvc-esphome-config
+
+

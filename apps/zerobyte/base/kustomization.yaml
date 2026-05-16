@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- external-secret.yaml
+- ingress.yaml
+- service.yaml
+- pv-backup-restic.yaml
+- pv-config.yaml
+- pv-docker-data.yaml
+- pv-storage-backup.yaml
+- pv-storage-ssd.yaml
+- pvc-backup-restic.yaml
+- pvc-config.yaml
+- pvc-docker-data.yaml
+- pvc-storage-backup.yaml
+- pvc-storage-ssd.yaml

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gotify
+  labels:
+   app.kubernetes.io/name: gotify
+spec:
+  revisionHistoryLimit: 3
+  replicas: 0
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gotify
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gotify
+        app: gotify
+    spec:
+      containers:
+        - name: gotify
+          image: "gotify/server:2.9.1"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 128Mi
+              cpu: 100m
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 40
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+          env:
+            - name: GOTIFY_DEFAULTUSER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: gotify-default-user
+                  key: password
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/data
+              name: gotify-config
+      volumes:
+        - name: gotify-config
+          persistentVolumeClaim:
+            claimName: pvc-gotify-config

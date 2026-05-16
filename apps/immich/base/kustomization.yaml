@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- certificate.yaml
+- external-secret.yaml
+#- ingress-route.yaml
+- ingress-external.yaml
+- pv-library.yaml
+- pv-postgres.yaml
+- pvc-library.yaml
+- pvc-postgres.yaml

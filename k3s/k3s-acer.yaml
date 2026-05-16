@@ -1,7 +1,7 @@
-write-kubeconfig-mode: "0644"
-cluster-init: false
 token: "CHANGE_ME"
-server: htttp://k3s-master:6443
+server: https://ubuntu-n100:6443
+flannel-backend: "none"
+disable-network-policy: true
 node-label:
   - "arch=x86"
   - "platform=proxmox"

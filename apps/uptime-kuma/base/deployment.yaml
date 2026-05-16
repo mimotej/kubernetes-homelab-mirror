@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: uptime-kuma
-          image: "docker.io/louislam/uptime-kuma:2.1.1"
+          image: "docker.io/louislam/uptime-kuma:2.3.2"
           imagePullPolicy: Always
           readinessProbe:
             httpGet:
@@ -54,7 +54,6 @@ spec:
               name: uptime-kuma-config
       volumes:
         - name: uptime-kuma-config
-          nfs:
-            server: 10.0.0.15
-            path: /storage/uptime-kuma
+          persistentVolumeClaim:
+            claimName: pvc-uptime-kuma-config
 

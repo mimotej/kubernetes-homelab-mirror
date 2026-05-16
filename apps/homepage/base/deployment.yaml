@@ -23,12 +23,18 @@ spec:
       dnsPolicy: None
       dnsConfig:
         nameservers:
-          - 10.0.0.15      # Custom DNS server
+          - 10.0.0.4      # Custom DNS server
       enableServiceLinks: true
       containers:
         - name: homepage
-          image: "ghcr.io/gethomepage/homepage:v1.9"
+          image: "ghcr.io/gethomepage/homepage:v1.13"
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 128Mi
+              cpu: 100m
           readinessProbe:
             httpGet:
               path: /
@@ -65,8 +71,7 @@ spec:
               name: logs
       volumes:
         - name: homepage-config
-          nfs:
-            server: 10.0.0.15
-            path: /storage/homepage
+          persistentVolumeClaim:
+            claimName: pvc-homepage-config
         - name: logs
           emptyDir: {}

@@ -4,3 +4,7 @@ kind: Kustomization
 
 resources:
 - externalSecret.yaml
+- pv-additional-data.yaml
+- pv-terraform-states.yaml
+- pvc-additional-data.yaml
+- pvc-terraform-states.yaml

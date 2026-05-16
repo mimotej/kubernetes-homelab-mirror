@@ -7,4 +7,6 @@ resources:
 - deployment-speedtest.yaml
 - ingress.yaml
 - service.yaml
+- pv-myspeed-config.yaml
+- pvc-myspeed-config.yaml
 

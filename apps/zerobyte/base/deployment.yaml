@@ -1,0 +1,170 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zerobyte
+  labels:
+    app.kubernetes.io/name: zerobyte
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zerobyte
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zerobyte
+        app: zerobyte
+    spec:
+      nodeSelector:
+        platform: n100
+      containers:
+        - name: zerobyte
+          image: "ghcr.io/nicotsx/zerobyte:v0.36.0"
+          imagePullPolicy: Always
+          securityContext:
+            capabilities:
+              add: ["SYS_ADMIN"]
+          resources:
+            limits:
+              memory: 2048Mi
+            requests:
+              memory: 512Mi
+              cpu: 100m
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4096
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4096
+            initialDelaySeconds: 40
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
+          env:
+            - name: BASE_URL
+              value: http://zerobyte.internal
+            - name: TZ
+              value: "Europe/Prague"
+            - name: RESTIC_HOSTNAME
+              value: mimotej-zerobyte
+            - name: TRUST_PROXY
+              value: "true"
+            - name: APP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: zerobyte-secrets
+                  key: zerobyte-app-secret
+          ports:
+            - name: http
+              containerPort: 4096
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/zerobyte
+              name: zerobyte-config
+            - mountPath: /immich/library
+              name: immich-library
+              subPath: immich/photos/library
+              readOnly: true
+            - mountPath: /immich/profile
+              name: immich-profile
+              subPath: immich/photos/profile
+              readOnly: true
+            - mountPath: /immich/upload
+              name: immich-upload
+              subPath: immich/photos/upload
+              readOnly: true
+            - mountPath: /immich/backups
+              name: immich-db
+              subPath: immich/photos/backups
+              readOnly: true
+            - mountPath: /network/pangolin
+              name: pangolin
+              subPath: pangolin
+              readOnly: true
+            - mountPath: /nextcloud-borg
+              name: nextcloud-borg
+              subPath: borg_backup_nextcloud/borg
+              readOnly: true
+            - mountPath: /homeassistant
+              name: homeassistant
+              subPath: homeassistant
+              readOnly: true
+            - mountPath: /crowdsec
+              name: crowdsec
+              subPath: crowdsec-k8s
+              readOnly: true
+            - mountPath: /onlyoffice
+              name: onlyoffice
+              subPath: onlyoffice
+              readOnly: true
+            - mountPath: /nextcloud
+              name: nextcloud
+              subPath: nextcloud
+              readOnly: true
+            - mountPath: /authentik
+              name: authentik
+              subPath: authentik-kubernetes
+              readOnly: true
+            - mountPath: /jellyfin
+              name: jellyfin
+              subPath: jellyfin-kubernetes
+              readOnly: true
+            - mountPath: /backup-restic
+              name: backup-restic
+            - name: fuse
+              mountPath: /dev/fuse
+      volumes:
+        - name: zerobyte-config
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-config
+        - name: immich-library
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: immich-upload
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: immich-profile
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: immich-db
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: pangolin
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-docker-data
+        - name: nextcloud
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: nextcloud-borg
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-backup
+        - name: homeassistant
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-backup
+        - name: crowdsec
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-docker-data
+        - name: onlyoffice
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-storage-ssd
+        - name: authentik
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-docker-data
+        - name: jellyfin
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-docker-data
+        - name: backup-restic
+          persistentVolumeClaim:
+            claimName: pvc-zerobyte-backup-restic
+        - name: fuse
+          hostPath:
+            path: /dev/fuse

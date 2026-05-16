@@ -1,0 +1,82 @@
+global:
+  nameOverride: authentik
+  fullnameOverride: authentik
+  envFrom:
+    - secretRef:
+        name: authentik-email-external-secret
+  # nodeSelector:
+  #   platform: n100
+
+authentik:
+  email:
+    host: env://EMAIL_HOST
+    user: env://EMAIL_USER
+    password: env://EMAIL_PASSWORD
+    port: 587
+    user_tls: true
+
+postgresql:
+  enabled: true
+  username: "authentik"
+  auth:
+    existingSecret: authentik-postgres-external-secret
+  primary:
+    containerSecurityContext:
+      readOnlyRootFilesystem: false
+    persistence:
+      enabled: true
+      existingClaim: pvc-postgres
+    extraVolumeMounts:
+      - name: authentik-db-dump
+        mountPath: /db_dump
+    extraVolumes:
+      - name: authentik-db-dump
+        persistentVolumeClaim:
+          claimName: pvc-authentik-db-dump
+
+server:
+  containerPorts:
+    http: 9001
+  service:
+    type: ClusterIP
+    servicePortHttp: 9001
+    servicePortHttps: 9002
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-postgres-external-secret
+          key: password
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secret-key-external-secret
+          key: secret_key
+  volumeMounts:
+    - name: brand
+      mountPath: /static/dist/assets/custom
+  volumes:
+      - name: brand
+        persistentVolumeClaim:
+          claimName: pvc-authentik-brand
+
+worker:
+  env:
+    - name: AUTHENTIK_POSTGRESQL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-postgres-external-secret
+          key: password
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secret-key-external-secret
+          key: secret_key
+  volumeMounts:
+    - name: brand
+      mountPath: /static/dist/assets/custom
+  volumes:
+      - name: brand
+        persistentVolumeClaim:
+          claimName: pvc-authentik-brand
+

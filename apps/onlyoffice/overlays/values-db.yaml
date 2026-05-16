@@ -1,0 +1,18 @@
+auth:
+  database: onlyoffice
+  username: onlyoffice
+  existingSecret: onlyoffice-secrets
+  secretKeys:
+    userPasswordKey: onlyoffice-db-password
+resourcesPreset: none
+
+primary:
+  persistence:
+    existingClaim: pvc-onlyoffice-database
+  extraVolumeMounts:
+    - name: onlyoffice-db-dump
+      mountPath: /db_dump
+  extraVolumes:
+    - name: onlyoffice-db-dump
+      persistentVolumeClaim:
+        claimName: pvc-onlyoffice-db-dump

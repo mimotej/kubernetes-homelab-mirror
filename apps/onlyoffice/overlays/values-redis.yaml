@@ -1,0 +1,15 @@
+auth:
+  existingPasswordSecret: onlyoffice-secrets
+  existingSecretPasswordKey: onlyoffice-redis-secret
+
+master:
+  persistence:
+    existingClaim: pvc-onlyoffice-redis
+  livenessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+replica:
+  replicaCount: 0

@@ -1,0 +1,36 @@
+{{- if .Values.matter.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter-{{ .Chart.Name }}
+  labels:
+    {{- include "homeassistant.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.matter.service.type }}
+  ports:
+    - port: {{ .Values.matter.service.port | default 5580 }}
+      targetPort: {{ .Values.matter.service.port | default 5580 }}
+      protocol: TCP
+      name: matter
+  selector:
+    {{- include "homeassistant.selectorLabels" . | nindent 4 }}
+
+{{- if .Values.matter.service.loadBalancer.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matter-{{ include "homeassistant.fullname" . }}-lb
+  labels:
+    {{- include "homeassistant.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: {{ .Values.matter.service.port | default 5580 }}
+      targetPort: {{ .Values.matter.service.port | default 5580 }}
+      protocol: TCP
+  selector:
+    {{- include "homeassistant.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- end }}

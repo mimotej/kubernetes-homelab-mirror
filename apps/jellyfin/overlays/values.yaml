@@ -1,5 +1,3 @@
-image:
-  tag: 10.11.6
 nodeSelector:
   platform: n100
 replicaCount: 1

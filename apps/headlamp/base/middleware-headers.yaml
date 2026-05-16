@@ -1,0 +1,23 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: headlamp-middleware-headers
+spec:
+  headers:
+    customRequestHeaders:
+      X-XSS-Protection: "1; mode=block"
+      X-Content-Type-Options: "nosniff"
+      X-Robots-Tag: "noindex, nofollow"
+      X-Forwarded-Proto: "https"
+      Referrer-Policy: "no-referrer-when-downgrade"
+      Permissions-Policy: "interest-cohort=()"
+      X-Permitted-Cross-Domain-Policies: "none"
+    customResponseHeaders:
+      X-XSS-Protection: "1; mode=block"
+      X-Content-Type-Options: "nosniff"
+      X-Robots-Tag: "noindex, nofollow"
+      X-Forwarded-Proto: "https"
+      Referrer-Policy: "no-referrer-when-downgrade"
+      Content-Security-Policy: "default-src 'self' *.mimotej.stream https: blob:; style-src 'self' *.mimotej.stream 'unsafe-inline' https:; script-src 'self' https://static.immich.cloud https://tiles.immich.cloud *.mimotej.stream *.prestashop.com 'unsafe-eval' 'unsafe-inline' https: blob: ; font-src 'self' *.prestashop.com *.mimotej.stream fonts.gstatic.com data:; img-src *.prestashop.com eu-ui-avatars.com 'self' *.mimotej.stream repo.jellyfin.org raw.githubusercontent.com cdn.jsdelivr.net *.tmdb.org *.gravatar.com *.w.org woocommerce.com paypalobjects.com data: blob:; connect-src 'self' *.prestashop.com https://static.immich.cloud https://tiles.immich.cloud *.basemaps.cartocdn.com tiles-a.basemaps.cartocdn.com  basemaps.cartocdn.com  *.mimotej.stream tiles.immich.cloud https: data:; frame-src 'self' *.mimotej.stream *.stripe.com *.survey.fm blob:; worker-src 'self' *.mimotej.stream blob:; upgrade-insecure-requests"
+      Permissions-Policy: "interest-cohort=()"
+      X-Permitted-Cross-Domain-Policies: "none"

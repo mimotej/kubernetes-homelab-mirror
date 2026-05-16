@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jellyfin-tls
+spec:
+  secretName: jellyfin-tls
+  dnsNames:
+    - "jellyfin.mimotej.stream"
+  issuerRef:
+    name: dns-challenge-issuer-prod
+    kind: ClusterIssuer

@@ -54,6 +54,5 @@ spec:
               name: myspeed-config
       volumes:
         - name: myspeed-config
-          nfs:
-            server: 10.0.0.15
-            path: /storage/myspeed
+          persistentVolumeClaim:
+            claimName: pvc-myspeed-config

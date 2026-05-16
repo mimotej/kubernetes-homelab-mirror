@@ -11,7 +11,7 @@ helmCharts:
   - name: gha-runner-scale-set
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 0.13.1
+    version: 0.14.1
     repo: oci://ghcr.io/actions/actions-runner-controller-charts
     namespace: arc-systems-homelab
     releaseName: arc-runner-set

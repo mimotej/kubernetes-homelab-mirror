@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onlyoffice
+  labels:
+    app: onlyoffice
+    app.kubernetes.io/name: onlyoffice
+spec:
+  selector:
+    matchLabels:
+      app: onlyoffice
+      app.kubernetes.io/name: onlyoffice
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: onlyoffice
+        app.kubernetes.io/name: onlyoffice
+    spec:
+      # nodeSelector:
+      #   platform: n100
+      containers:
+        - name: onlyoffice
+          image: thomisus/onlyoffice-documentserver-unlimited:9.2.1
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - "/bin/bash"
+                  - "-c"
+                  - "cp -v /tmp/default.json /etc/onlyoffice/documentserver;cp -v /tmp/ds-docservice.conf /etc/nginx/includes"
+          env:
+            - name: DB_TYPE
+              value: postgres
+            - name: DB_HOST
+              value: onlyoffice-db-postgresql.onlyoffice.svc.cluster.local
+            - name: DB_NAME
+              value: onlyoffice
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: onlyoffice-secrets
+                  key: onlyoffice-db-username
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: onlyoffice-secrets
+                  key: onlyoffice-db-password
+            - name: AMQP_URI
+              valueFrom:
+                secretKeyRef:
+                  name: onlyoffice-secrets
+                  key: onlyoffice-amqp-connection-string
+            - name: REDIS_SERVER_HOST
+              value: redis-headless.onlyoffice.svc.cluster.local
+            - name: REDIS_SERVER_PORT
+              value: "6379"
+            - name: REDIS_SERVER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: onlyoffice-secrets
+                  key: onlyoffice-redis-secret
+            - name: WOPI_ENABLED
+              value: "true"
+            - name: JWT_ENABLED
+              value: "true"
+            - name: JWT_IN_BODY
+              value: "true"
+            - name: JWT_HEADER
+              value: Authorization
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: onlyoffice-secrets
+                  key: onlyoffice-jwt-secret
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - name: default-config
+              mountPath: /tmp/default.json
+              subPath: default.json
+            - name: ds-docservice
+              mountPath: /tmp/ds-docservice.conf
+              subPath: ds-docservice.conf
+      volumes:
+        - name: default-config
+          configMap:
+            name: default-config
+        - name: ds-docservice
+          configMap:
+            name: ds-docservice

@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: dns-challenge-issuer-prod
+spec:
+ acme:
+   email: michal.drla@protonmail.com
+   # We use the staging server here for testing to avoid hitting
+   server: https://acme-v02.api.letsencrypt.org/directory
+   privateKeySecretRef:
+     # if not existing, it will register a new account and stores it
+     name: letsencrypt-prod
+   solvers:
+     - dns01:
+         cloudflare:
+           apiTokenSecretRef:
+             name: cloudflare-api-token-secret
+             key: api-token

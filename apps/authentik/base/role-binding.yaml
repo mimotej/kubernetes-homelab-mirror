@@ -1,0 +1,12 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: exec-dump-binding
+subjects:
+  - kind: ServiceAccount
+    name: kubectl-sql-dump
+roleRef:
+  kind: Role
+  name: exec-dump
+  apiGroup: rbac.authorization.k8s.io

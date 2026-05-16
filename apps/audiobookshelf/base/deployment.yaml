@@ -8,7 +8,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-     app.kubernetes.io/name: audiobookshelf
+      app.kubernetes.io/name: audiobookshelf
   strategy:
     type: Recreate
   template:
@@ -18,21 +18,26 @@ spec:
     spec:
       containers:
         - name: audiobookshelf
-          image: ghcr.io/advplyr/audiobookshelf:2.32.1 
+          image: ghcr.io/advplyr/audiobookshelf:2.34.0
           ports:
             - name: http
               containerPort: 80
           volumeMounts:
-            - name: config
+            - name: docker-data
               mountPath: /config
-            - name: metadata
+              subPath: config
+            - name: docker-data
               mountPath: /metadata
-            - name: audiobooks
+              subPath: metadata
+            - name: storage-media
               mountPath: /audiobooks
-            - name: podcasts
+              subPath: bookshelf/audio_books
+            - name: storage-media
               mountPath: /podcasts
-            - name: ebooks
+              subPath: bookshelf/podcasts
+            - name: storage-media
               mountPath: /ebooks
+              subPath: kavita/books
             - name: tmp
               mountPath: /tmp
           resources:
@@ -40,27 +45,11 @@ spec:
               cpu: 50m
               memory: 384Mi
       volumes:
-        - name: config
-          nfs:
-            server: 10.0.0.15
-            path: /storage/media/audiobookshelf/config
-        - name: audiobooks
-          nfs:
-            server: 10.0.0.15
-            path: /storage/media/bookshelf/audio_books
-        - name: ebooks
-          nfs:
-            server: 10.0.0.15
-            path: /storage/media/kavita/books
-
-        - name: metadata
-          nfs:
-            server: 10.0.0.15
-            path: /storage/media/audiobookshelf-kubernetes/metadata
-        - name: podcasts
-          nfs:
-            server: 10.0.0.15
-            path: /storage/media/bookshelf/audio_books/podcasts
+        - name: docker-data
+          persistentVolumeClaim:
+            claimName: pvc-audiobookshelf-docker-data
+        - name: storage-media
+          persistentVolumeClaim:
+            claimName: pvc-audiobookshelf-storage-media
         - name: tmp
-          emptyDir: { }
-
+          emptyDir: {}

@@ -1,0 +1,17 @@
+auth:
+  database: crowdsec
+  username: crowdsec
+  existingSecret: crowdsec-secrets
+  secretKeys:
+    userPasswordKey: crowdsec-db-password
+
+primary:
+  persistence:
+    existingClaim: pvc-database
+  extraVolumeMounts:
+    - name: crowdsec-db-dump
+      mountPath: /db_dump
+  extraVolumes:
+    - name: crowdsec-db-dump
+      persistentVolumeClaim:
+        claimName: pvc-crowdsec-db-dump

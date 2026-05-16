@@ -1,0 +1,15 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gotify
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`gotify.internal`)
+      kind: Rule
+      services:
+        - name: gotify
+          port: 80

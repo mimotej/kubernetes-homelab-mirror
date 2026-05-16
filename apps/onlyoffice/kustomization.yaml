@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: onlyoffice
+
+resources:
+  - ../../cluster/base/namespaces/onlyoffice
+  - base
+
+helmCharts:
+  - name: postgresql
+    repo: https://charts.bitnami.com/bitnami
+    valuesFile: overlays/values-db.yaml
+    version: 18.6.6
+    namespace: onlyoffice
+    releaseName: onlyoffice-db
+  - name: rabbitmq
+    repo: https://charts.bitnami.com/bitnami
+    valuesFile: overlays/values-rabbitmq.yaml
+    version: 16.0.14
+    namespace: onlyoffice
+    releaseName: rabbitmq
+  - name: redis
+    repo: https://charts.bitnami.com/bitnami
+    valuesFile: overlays/values-redis.yaml
+    version: 25.5.3
+    namespace: onlyoffice
+    releaseName: redis

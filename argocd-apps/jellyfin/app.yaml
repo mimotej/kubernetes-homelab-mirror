@@ -4,6 +4,16 @@ kind: Application
 metadata:
   name: jellyfin
 spec:
+  ignoreDifferences:
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jqPathExpressions:
+      - .status
+      - .metadata.finalizers
+      - .spec.data[].remoteRef.conversionStrategy
+      - .spec.data[].remoteRef.decodingStrategy
+      - .spec.data[].remoteRef.metadataPolicy
+      - .spec.data[].remoteRef.nullBytePolicy
   destination:
     namespace: jellyfin
     name: production

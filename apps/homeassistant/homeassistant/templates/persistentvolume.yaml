@@ -1,0 +1,77 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-config-pv
+spec:
+  capacity:
+    storage: {{ .Values.persistence.size | default "40Gi" }}
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /nfs/storage/homeassistant
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: platform
+          operator: In
+          values:
+          - n100
+{{- end }}
+
+{{- if and .Values.backups.enabled (not .Values.backups.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-backups-pv
+spec:
+  capacity:
+    storage: {{ .Values.backups.size | default "40Gi" }}
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /storage/backup/homeassistant
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: platform
+          operator: In
+          values:
+          - n100
+{{- end }}
+
+{{- if and .Values.matter.persistence.enabled (not .Values.matter.persistence.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "homeassistant.fullname" . }}-matter-pv
+spec:
+  capacity:
+    storage: {{ .Values.matter.persistence.size | default "40Gi" }}
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /nfs/storage/matter
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: platform
+          operator: In
+          values:
+          - n100
+{{- end }}

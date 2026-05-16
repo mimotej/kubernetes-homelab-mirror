@@ -11,7 +11,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   local:
-    path: /storage/jellyfin/config
+    path: /nfs/storage/jellyfin-kubernetes/config
   nodeAffinity:
     required:
       nodeSelectorTerms:

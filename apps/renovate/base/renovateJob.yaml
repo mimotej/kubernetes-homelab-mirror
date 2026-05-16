@@ -4,17 +4,14 @@ metadata:
   name: renovate-github
   namespace: renovate-operator
 spec:
-  discoveryFilter: mimotej/kubernetes-homelab-mirror
-  extraEnv:
-    - name: RENOVATE_PLATFORM
-      value: github
-    - name: RENOVATE_ENDPOINT
-      value: https://api.github.com/
-  image: renovate/renovate:43.31.1
+  discoveryFilters: ["mimotej/kubernetes-homelab-mirror*"]
+  provider:
+    name: github
+  image: renovate/renovate:43.180.3
   parallelism: 5
   resources:
     requests:
       cpu: 100m
       memory: 128Mi
-  schedule: 14 */3 * * *
+  schedule: 14 1 * * *
   secretRef: renovate-secret
