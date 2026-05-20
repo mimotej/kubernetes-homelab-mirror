@@ -11,7 +11,7 @@ helmCharts:
   - name: adguard-home
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 13.3.0
+    version: 13.3.1
     repo: oci://oci.trueforge.org/truecharts
     namespace: adguard-home
     releaseName: adguard-home
