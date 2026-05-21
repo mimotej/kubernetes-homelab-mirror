@@ -6,7 +6,7 @@ namespace: kube-system
 helmCharts:
   - name: descheduler
     includeCRDs: true
-    version: 0.35.1
+    version: 0.36.0
     repo: https://kubernetes-sigs.github.io/descheduler
     valuesFile: overlays/values.yaml
     namespace: kube-system
