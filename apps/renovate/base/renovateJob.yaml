@@ -7,7 +7,7 @@ spec:
   discoveryFilters: ["mimotej/kubernetes-homelab-mirror*"]
   provider:
     name: github
-  image: renovate/renovate:43.191.2
+  image: renovate/renovate:43.195.0
   parallelism: 5
   resources:
     requests:
