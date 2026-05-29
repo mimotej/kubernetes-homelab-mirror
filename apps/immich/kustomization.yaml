@@ -18,7 +18,7 @@ helmCharts:
   - name: postgresql
     repo: https://charts.bitnami.com/bitnami
     valuesFile: overlays/values-db.yaml
-    version: 18.6.7
+    version: 18.6.8
     namespace: immich
     releaseName: immich-db
 
