@@ -11,7 +11,7 @@ helmCharts:
   - name: renovate-operator
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 4.8.1
+    version: 4.10.0
     repo:  oci://ghcr.io/mogenius/helm-charts
     namespace: renovate
     releaseName: renovate-operator
