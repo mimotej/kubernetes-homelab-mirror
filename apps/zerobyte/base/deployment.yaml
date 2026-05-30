@@ -22,7 +22,7 @@ spec:
         platform: n100
       containers:
         - name: zerobyte
-          image: "ghcr.io/nicotsx/zerobyte:v0.37.2"
+          image: "ghcr.io/nicotsx/zerobyte:v0.37.3"
           imagePullPolicy: Always
           securityContext:
             capabilities:
