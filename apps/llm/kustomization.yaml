@@ -10,7 +10,7 @@ resources:
 helmCharts:
   - name: llmkube
     includeCRDs: true
-    version: 0.8.3
+    version: 0.9.3
     repo: https://defilantech.github.io/LLMKube
     namespace: llm
     releaseName: llmkube
