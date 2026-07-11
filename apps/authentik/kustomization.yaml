@@ -11,7 +11,7 @@ helmCharts:
   - name: authentik
     valuesFile: overlays/values.yaml
     includeCRDs: true
-    version: 2026.5.2
+    version: 2026.5.4
     repo: https://charts.goauthentik.io
     namespace: authentik
     releaseName: authentik
