@@ -11,7 +11,7 @@ helmCharts:
   - name: nextcloud
     includeCRDs: true
     repo: https://nextcloud.github.io/helm/
-    version: 9.1.2
+    version: 9.2.0
     valuesFile: overlays/values.yaml
     namespace: nextcloud
     releaseName: nextcloud
