@@ -10,7 +10,7 @@ resources:
 helmCharts:
   - name: traefik
     includeCRDs: true
-    version: 40.2.0
+    version: 40.3.0
     valuesFile: overlays/values.yaml
     repo: https://traefik.github.io/charts
     namespace: traefik
