@@ -18,7 +18,7 @@ helmCharts:
   - name: postgresql
     repo: https://charts.bitnami.com/bitnami
     valuesFile: overlays/values-db.yaml
-    version: 18.7.3
+    version: 18.7.13
     namespace: crowdsec
     releaseName: crowdsec-db
 
