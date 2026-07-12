@@ -9,7 +9,7 @@ resources:
 helmCharts:
   - name: headlamp
     includeCRDs: true
-    version: 0.42.0
+    version: 0.43.0
     valuesFile: overlays/values.yaml
     repo: https://kubernetes-sigs.github.io/headlamp/
     namespace: kube-system
