@@ -7,4 +7,4 @@ type: application
 version: 0.1.0
 
 # renovate: docker=ghcr.io/home-assistant/home-assistant
-appVersion: "2026.6"
+appVersion: "2026.7"
