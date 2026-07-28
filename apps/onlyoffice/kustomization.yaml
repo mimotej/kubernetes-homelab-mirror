@@ -23,6 +23,6 @@ helmCharts:
   - name: redis
     repo: https://charts.bitnami.com/bitnami
     valuesFile: overlays/values-redis.yaml
-    version: 25.5.3
+    version: 27.0.18
     namespace: onlyoffice
     releaseName: redis
