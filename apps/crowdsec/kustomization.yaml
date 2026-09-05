@@ -11,7 +11,7 @@ helmCharts:
   - name: crowdsec
     includeCRDs: true
     repo: https://crowdsecurity.github.io/helm-charts
-    version: 0.24.0
+    version: 0.24.2
     valuesFile: overlays/values.yaml
     namespace: crowdsec
     releaseName: crowdsec
